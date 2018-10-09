@@ -11,5 +11,5 @@ function makeLambda(scalaCallObject) {
     };
 }
 
-exports.handler = makeLambda(com.htc.InvokeSuccess());
-exports.failing = makeLambda(com.htc.InvokeFail());
+exports.handler = makeLambda(InvokeSuccess);
+exports.failing = makeLambda(InvokeFail);

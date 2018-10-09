@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "description": "daily reporter of vending machine",
   "dependencies": {
-    "aws-sdk": "2.1.23"
+    "aws-sdk": "^2.1.23"
   }
 }
