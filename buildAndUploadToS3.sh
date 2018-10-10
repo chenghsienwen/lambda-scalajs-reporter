@@ -16,6 +16,7 @@ if [ -f $inputFile ]; then
   rm -rf $inputFile
 fi
 sbt fastOptJS
+sed -i 's/$g.require/require/g' `find target -name *-fastopt.js`
 cp `find target -name *-fastopt.js` ./
 cp `find target -name *-jsdeps.js` index.js
 zip -r $inputFile node_modules *.json index.js `find *-fastopt.js`

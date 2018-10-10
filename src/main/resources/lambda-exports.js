@@ -1,4 +1,4 @@
-require("lambda-scalajs-reporter-fastopt.js");
+var main = require("lambda-scalajs-reporter-fastopt.js");
 
 function makeLambda(scalaCallObject) {
     return function(event, context) {
@@ -11,5 +11,5 @@ function makeLambda(scalaCallObject) {
     };
 }
 
-exports.handler = makeLambda(InvokeSuccess);
-exports.failing = makeLambda(InvokeFail);
+exports.handler = makeLambda(main.InvokeSuccess());
+exports.failing = makeLambda(main.InvokeFail());
