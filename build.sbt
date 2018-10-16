@@ -13,7 +13,8 @@ scalaJSUseRhino in Global := false
 scalaJSStage in Global := FastOptStage
 skip in packageJSDependencies := false
 jsDependencies ++= Seq(ProvidedJS / "lambda-exports.js",
-  "org.webjars.bower" % "aws-sdk-js" % "2.1.23" / "aws-sdk.js" minified "aws-sdk.min.js" commonJSName "AWS")
+  "org.webjars.bower" % "aws-sdk-js" % "2.14.0" / "aws-sdk.js" minified "aws-sdk.min.js" commonJSName "AWS"
+)
 
 lazy val versions = new {
   val awslambda        = "1.1.0"

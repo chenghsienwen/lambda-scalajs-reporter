@@ -19,7 +19,7 @@ sbt fastOptJS
 sed -i 's/$g.require/require/g' `find target -name *-fastopt.js`
 cp `find target -name *-fastopt.js` ./
 cp `find target -name *-jsdeps.js` index.js
-zip -r $inputFile node_modules *.json index.js `find *-fastopt.js`
+zip -r $inputFile index.js `find *-fastopt.js`
 sleep 5
 echo aws s3 cp $inputFile s3://$lambdaPath
 aws s3 cp $inputFile s3://$lambdaPath

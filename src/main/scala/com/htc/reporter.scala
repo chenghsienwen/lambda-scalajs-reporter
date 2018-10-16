@@ -12,10 +12,10 @@ import facade.amazonaws._
 
 import io.scalajs.nodejs.global
 import io.scalajs.nodejs.{console, process}
-import facade.amazonaws.services.s3.{Bucket, GetBucketLocationRequest, GetObjectOutput, GetObjectRequest, ListObjectsOutput, ListObjectsRequest, ListObjectsV2Output, ListObjectsV2Request, PutObjectOutput, PutObjectRequest, S3}
+import facade.amazonaws.services.s3.{Bucket, Error, GetBucketLocationRequest, GetObjectOutput, GetObjectRequest, ListObjectsOutput, ListObjectsRequest, ListObjectsV2Output, ListObjectsV2Request, PutObjectOutput, PutObjectRequest, S3}
 
 import scala.concurrent.Future
-import scala.scalajs.js.Dynamic.{ global => g, newInstance => jsnew }
+import scala.scalajs.js.Dynamic.{global => g, newInstance => jsnew}
 import scala.scalajs.js.{special, typeOf}
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -29,63 +29,20 @@ object InvokeSuccess {
     val s3LatestKey = baseKey + "/latest"
     println(context.invokedFunctionArn)
 
-    var moment = g.require("moment")
-    var AWS = g.require("aws-sdk")
-    var now = moment().format()
-    println(s"now $now")
-    AWS.config.update(region)
-    var s3 = jsnew(AWS.S3)("2006-03-01").asInstanceOf[S3]
-    var readParams = ListObjectsRequest(Bucket = bucket)
+    AWS.config.region = region
+    val s3 = AWS.S3()
+    println(s"s3 target: ${AWS.config.region} ${bucket} ${s3LatestKey}")
 
-    // call S3 to create the bucket
-    s3.listObjects(readParams, (err:Error, data:ListObjectsOutput)=> {
-      if (err.message.nonEmpty) {
-        println("Error", err)
-      } else {
-        println("Success", data)
-      }
-    })
+    val request = ListObjectsV2Request(Bucket = bucket, Prefix = s3LatestKey)
 
-      AWS.config.region = region
-      val s3 = AWS.S3()
-      println(s"s3 target: ${AWS.config.region} ${bucket} ${s3LatestKey}")
-      s3.putObject(PutObjectRequest(Bucket = bucket, Key = s"${s3LatestKey}/testId5"), (err, data: PutObjectOutput) => {
-        println(s"got callback from get object $data")
-        err != null match {
-          case true => println(s"error ${err}")
-          case _ => println(s"data ${data}")
-        }
-      })
+    println(s"request list ${request.Bucket} ${request.Prefix}")
 
-      val params = GetObjectRequest(Bucket = bucket, Key = s"${s3LatestKey}/testId5")
+    println(s"data : ${s3}")
 
-      s3.getObject(params, (err, data: GetObjectOutput) => {
-        println(s"got callback from get object $data")
-        err != null match {
-          case true => println(s"error ${err}")
-          case _ => println(s"data ${data}")
-        }
-      })
-
-    s3.getBucketLocation(GetBucketLocationRequest(Bucket = bucket), (err, data) => {
-      if (err != null) console.log(err)
-      else console.log(data)
-    })
-
-      val request = ListObjectsV2Request(Bucket = bucket, Prefix = s3LatestKey)
-      println(s"request list ${request.Bucket} ${request.Prefix}")
-      s3.listObjectsV2(request, (err, data:ListObjectsV2Output) => {
-        err != null match {
-          case true => println(s"error ${err}")
-          case _ => println(s"data ${data}")
-        }
-      })
+    val today = jsnew(g.Date)()
+    println(s"today $today")
 
 
-//
-//    val request = new ListObjectsV2Request().withBucketName(bucket).withPrefix(s3LatestKey)
-//    val objectList = s3Client.listObjectsV2(request).getObjectSummaries
-//    LOGGER.info(s"data size : ${objectList.size}")
 
     "Completed successful invocation."
   }
